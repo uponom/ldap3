@@ -349,6 +349,8 @@ def safe_dn(dn, decompose=False, reverse=False):
         escaped_dn = dn
     elif dn.startswith('<SID=') and dn.endswith('>'):  # Active Directory allows looking up objects by putting its security identifier (SID) in a specially-formatted DN (e.g. '<SID=S-#-#-##-##########-##########-##########-######>')
         escaped_dn = dn
+    elif dn.startswith('<TTL=') and dn.endswith('>'):  # Active Directory allows put TTL of dynamic group members (e.g. '<TTL=1000,CN=user1,OU=company,DC=test,DC=local>'). See "Privileged Access Management Feature" of Windows Server 2016 forest functional level.
+        escaped_dn = dn
     elif '@' not in dn:  # active directory UPN (User Principal Name) consist of an account, the at sign (@) and a domain, or the domain level logn name domain\username
         for component in parse_dn(dn, escape=True):
             if decompose:
